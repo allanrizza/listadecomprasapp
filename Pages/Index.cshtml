@@ -1,0 +1,72 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<!-- <i class="fa-solid fa-trash" style="color: #e42525;"></i>-->
+
+<div class="text-center" data-bs-theme="dark">
+    <h1 class="display-4 p-4"><img src="/img/pandora.png" width="120px"></img>Lista de Compras<img src="/img/pixie.png" width="150px"></img></h1>
+    <table class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Item</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Comprado</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+            @{int count = 1;}
+            @foreach(var item in Model.Itens)
+            {
+                bool comprado = item.Comprado;
+                
+                <tr>
+                <td scope="row">@count</td>
+                <td scope="row">@item.Nome</td>
+                <td scope="row">@item.Quantidade</td>
+                @if(comprado)
+                {
+                        <td scope="row"><input class="form-check-input mycheckbox" type="checkbox" id="mycheckbox" checked onchange="comprado(@item.Id)"></td>
+                } else
+                {
+                        <td scope="row"><input class="form-check-input mycheckbox" type="checkbox" id="mycheckbox" onchange="comprado(@item.Id)"></td>
+                }
+                    <td scope="row">
+                        <form asp-page-handler="delete" method="post" asp-route-id="@item.Id">
+                            <button class="btn btn-default"><i class="fa-solid fa-trash" style="color: #e42525;"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    
+    </table>
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Nome do Item</label>
+            <input type="text" class="form-control" name="nome" placeholder="Nome do Item">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Quantidade</label>
+            <input type="number" class="form-control" name="quantidade" placeholder="Quantidade">
+        </div>
+        <div class="form-group row">
+            <div class="center">
+                <button type="submit" class="btn btn-primary m-3">Adicionar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    function comprado(id) {
+        fetch(`?handler=Comprado&id=${id}`);
+    }
+
+</script>
